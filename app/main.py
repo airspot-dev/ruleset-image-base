@@ -35,12 +35,8 @@ def main():
         app.logger.debug("RCVR: {}".format(event_data))
         event_type = event_info.get("type")
         subject = event_info.get("subject", "sys-0")
-        # TODO: important!!
-        # need to find a way to avoid a return of messages from the same service
-        # (for example when resending it again after intercepted in the first time)
-        # this workaround only works when in a knative service or at least when SOURCE environment
-        # variable is set
-
+        
+        # prevent experienced dangerous situations
         if event_info["source"] == os.environ.get("K_SERVICE", os.environ.get("SOURCE")):
             return Response(status=201)
 
